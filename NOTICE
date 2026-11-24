@@ -1,0 +1,6 @@
+EBTOP is based on btop++ 1.4.8 (https://github.com/aristocratos/btop).
+Upstream copyright 2021 Aristocratos and contributors.
+EBTOP modifications copyright 2026 Norbert Jander.
+Licensed under Apache-2.0. See LICENSE.
+The GPU Taskmanager theme is licensed under MIT. See themes/LICENSE-GPU-Taskmanager.txt.
+Bundled third-party components retain their own notices and licenses.
