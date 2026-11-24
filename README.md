@@ -8,7 +8,7 @@ Terminal monitor for many-core and multi-GPU servers. Based on
 - Press `5` or click `5 gpu` to toggle the GPU view. GPU detection depends on the driver and available metrics.
 - Open **License** from the main menu for attribution and licensing information.
 
-Install the AMD64 Debian package using `sudo apt install ./tmfmc_1.0.1-1_amd64.deb` and launch with `tmfmc`.
+Install the AMD64 Debian package using `sudo apt install ./tmfmc_1.0.2-1_amd64.deb` and launch with `tmfmc`.
 Configuration is stored in `${XDG_CONFIG_HOME:-~/.config}/tmfmc/tmfmc.conf`.
 CPU, GPU, memory and network graphs use Braille by default. The optional xterm desktop launcher uses the bundled FreeMono font in UTF-8 mode. For other terminal emulators, select a monospace font with Braille coverage.
 The GPU Taskmanager color scheme is used for new configurations.
