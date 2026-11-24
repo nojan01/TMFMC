@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=TMFMC
+Comment=Terminal monitor for many-core and multi-GPU servers
+Exec=xterm -u8 -fa FreeMono -T TMFMC -e tmfmc
+Icon=utilities-system-monitor
+Terminal=false
+Categories=System;Monitor;

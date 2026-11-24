@@ -1,4 +1,4 @@
-// Modified for EBTOP. Changes copyright 2026 Norbert Jander.
+// Modified for TMFMC. Changes copyright 2026 Norbert Jander.
 /* Copyright 2021 Aristocratos (jakob@qvantnet.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -239,8 +239,8 @@ namespace Menu {
 				"Set color theme.",
 				"",
 				"Choose from all theme files in (usually)",
-				"\"/usr/[local/]share/ebtop/themes\" and",
-				"\"~/.config/ebtop/themes\".",
+				"\"/usr/[local/]share/tmfmc/themes\" and",
+				"\"~/.config/tmfmc/themes\".",
 				"",
 				"\"Default\" for builtin default theme.",
 				"\"TTY\" for builtin 16-color theme.",
@@ -1948,7 +1948,7 @@ static int optionsMenu(const string& key) {
 				"Der Upstream-Name bezeichnet die Herkunft.",
 				"Die Lizenz gewährt keine Markenrechte.",
 				"Lizenz und Hinweise im DEB-Paket unter",
-				"/usr/share/doc/ebtop/"
+				"/usr/share/doc/tmfmc/"
 			};
 			messageBox = Menu::msgBox{48, 0, lines, "Lizenz"};
 			Global::overlay = messageBox();

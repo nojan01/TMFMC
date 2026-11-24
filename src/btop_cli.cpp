@@ -1,4 +1,4 @@
-// Modified for EBTOP. Changes copyright 2026 Norbert Jander.
+// Modified for TMFMC. Changes copyright 2026 Norbert Jander.
 // SPDX-License-Identifier: Apache-2.0
 
 #include "btop_cli.hpp"
@@ -36,9 +36,9 @@ static constexpr auto RESET = "\033[0m"sv;
 
 static void version() noexcept {
 	if constexpr (GIT_COMMIT.empty()) {
-		fmt::println("EBTOP version: {}{}{}", BOLD, Global::Version, RESET);
+		fmt::println("TMFMC version: {}{}{}", BOLD, Global::Version, RESET);
 	} else {
-		fmt::println("EBTOP version: {}{}+{}{}", BOLD, Global::Version, GIT_COMMIT, RESET);
+		fmt::println("TMFMC version: {}{}+{}{}", BOLD, Global::Version, GIT_COMMIT, RESET);
 	}
 }
 

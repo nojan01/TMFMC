@@ -1,4 +1,4 @@
-// Modified for EBTOP. Changes copyright 2026 Norbert Jander.
+// Modified for TMFMC. Changes copyright 2026 Norbert Jander.
 // Copyright (c) 2026 Norbert Jander
 // SPDX-License-Identifier: Apache-2.0
 #pragma once

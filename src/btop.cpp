@@ -1,4 +1,4 @@
-// Modified for EBTOP. Changes copyright 2026 Norbert Jander.
+// Modified for TMFMC. Changes copyright 2026 Norbert Jander.
 /* Copyright 2021 Aristocratos (jakob@qvantnet.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,12 +88,12 @@ using namespace std::literals;
 
 namespace Global {
 	const vector<array<string, 2>> Banner_src = {
-		{"#20d9ef", "                         "},
-		{"#20d9ef", "EEEE BBB  TTTTT  OOO  PPP"},
-		{"#20d9ef", "E    B  B   T   O   O P  P"},
-		{"#20d9ef", "EEE  BBB    T   O   O PPP"},
-		{"#20d9ef", "E    B  B   T   O   O P"},
-		{"#20d9ef", "EEEE BBB    T    OOO  P"},
+		{"#20d9ef", "TTTTT M   M FFFFF M   M  CCCC"},
+		{"#20d9ef", "  T   MM MM F     MM MM C    "},
+		{"#20d9ef", "  T   M M M FFF   M M M C    "},
+		{"#20d9ef", "  T   M   M F     M   M C    "},
+		{"#20d9ef", "  T   M   M F     M   M  CCCC"},
+		{"#20d9ef", "                             "},
 	};
 	const string Version = "1.0.0";
 
@@ -882,7 +882,7 @@ static auto configure_tty_mode(std::optional<bool> force_tty) {
 			Config::conf_file = cli.config_file.value();
 		} else if (config_dir.has_value()) {
 			Config::conf_dir = config_dir.value();
-			Config::conf_file = Config::conf_dir / "ebtop.conf";
+			Config::conf_file = Config::conf_dir / "tmfmc.conf";
 
 			auto log_file = Config::get_log_file();
 			if (log_file.has_value()) {
@@ -927,12 +927,12 @@ static auto configure_tty_mode(std::optional<bool> force_tty) {
 	}
 #endif
 	if (std::error_code ec; not Global::self_path.empty()) {
-		Theme::theme_dir = fs::canonical(Global::self_path / "../share/ebtop/themes", ec);
+		Theme::theme_dir = fs::canonical(Global::self_path / "../share/tmfmc/themes", ec);
 		if (ec or not fs::is_directory(Theme::theme_dir) or access(Theme::theme_dir.c_str(), R_OK) == -1) Theme::theme_dir.clear();
 	}
 	//? If relative path failed, check two most common absolute paths
 	if (Theme::theme_dir.empty()) {
-		for (auto theme_path : {"/usr/local/share/ebtop/themes", "/usr/share/ebtop/themes"}) {
+		for (auto theme_path : {"/usr/local/share/tmfmc/themes", "/usr/share/tmfmc/themes"}) {
 			if (fs::is_directory(fs::path(theme_path)) and access(theme_path, R_OK) != -1) {
 				Theme::theme_dir = fs::path(theme_path);
 				break;
