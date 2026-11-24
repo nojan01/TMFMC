@@ -88,14 +88,14 @@ using namespace std::literals;
 
 namespace Global {
 	const vector<array<string, 2>> Banner_src = {
-		{"#20d9ef", "TTTTT M   M FFFFF M   M  CCCC"},
-		{"#20d9ef", "  T   MM MM F     MM MM C    "},
-		{"#20d9ef", "  T   M M M FFF   M M M C    "},
-		{"#20d9ef", "  T   M   M F     M   M C    "},
-		{"#20d9ef", "  T   M   M F     M   M  CCCC"},
-		{"#20d9ef", "                             "},
+		{"#65edff", "█████  █   █  █████  █   █   ████"},
+		{"#35dff5", "  █    ██ ██  █      ██ ██  █    "},
+		{"#20d9ef", "  █    █ █ █  ████   █ █ █  █    "},
+		{"#18bed3", "  █    █   █  █      █   █  █    "},
+		{"#12aabd", "  █    █   █  █      █   █   ████"},
+		{"#12aabd", "                                 "},
 	};
-	const string Version = "1.0.0";
+	const string Version = "1.0.1";
 
 	int coreCount;
 	string overlay;

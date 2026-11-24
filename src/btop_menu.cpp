@@ -145,7 +145,11 @@ namespace Menu {
 			"├─┤├┤ │  ├─┘",
 			"┴ ┴└─┘┴─┘┴  "
 		},
-		{"        ", " LIZENZ ", "        "},
+		{
+			"┬  ┌┬┐┌─┐┌─┐┌┐┌┌─┐┌─┐",
+			"│   │ │  ├┤ │││└─┐├┤ ",
+			"┴─┘└┴┘└─┘└─┘┘└┘└─┘└─┘",
+		},
 		{
 			"┌─┐ ┬ ┬ ┬┌┬┐",
 			"│─┼┐│ │ │ │ ",
@@ -164,7 +168,11 @@ namespace Menu {
 			"╠═╣╠╣ ║  ╠═╝",
 			"╩ ╩╚═╝╩═╝╩  "
 		},
-		{"        ", " LIZENZ ", "        "},
+		{
+			"╦  ╔╦╗╔═╗╔═╗╔╗╔╔═╗╔═╗",
+			"║   ║ ║  ╠╣ ║║║╚═╗╠╣ ",
+			"╩═╝╚╩╝╚═╝╚═╝╝╚╝╚═╝╚═╝",
+		},
 		{
 			"╔═╗ ╦ ╦ ╦╔╦╗ ",
 			"║═╬╗║ ║ ║ ║  ",
@@ -172,7 +180,7 @@ namespace Menu {
 		}
 	};
 
-	const array<int, 4> menu_width = {19, 12, 8, 12};
+	const array<int, 4> menu_width = {19, 12, 21, 12};
 
 	const vector<array<string, 2>> help_text = {
 		{"Mouse 1", "Clicks buttons and selects in process list."},
@@ -1937,20 +1945,19 @@ static int optionsMenu(const string& key) {
 	static int licenseMenu(const string& key) {
 		if (redraw) {
 			const vector<string> lines = {
-				"Basierend auf btop++ 1.4.8",
-				"© 2021 Aristocratos und Mitwirkende",
-				"Apache 2.0 erlaubt Anpassung und Weitergabe.",
-				"Anpassungen © 2026 Norbert Jander",
-				"Für Server mit vielen CPU-Kernen und GPUs",
-				"Bei Weitergabe: Lizenz beilegen,",
-				"Änderungen kennzeichnen und einschlägige",
-				"Copyright- und NOTICE-Hinweise erhalten.",
-				"Der Upstream-Name bezeichnet die Herkunft.",
-				"Die Lizenz gewährt keine Markenrechte.",
-				"Lizenz und Hinweise im DEB-Paket unter",
+				"Based on btop++ 1.4.8",
+				"Copyright 2021 Aristocratos and contributors",
+				"Apache License, Version 2.0",
+				"TMFMC changes copyright 2026 Norbert Jander",
+				"Modifications and redistribution permitted.",
+				"Include the license when redistributing.",
+				"Mark changes and retain applicable notices.",
+				"The upstream name identifies the origin.",
+				"The license grants no trademark rights.",
+				"Full license and third-party notices:",
 				"/usr/share/doc/tmfmc/"
 			};
-			messageBox = Menu::msgBox{48, 0, lines, "Lizenz"};
+			messageBox = Menu::msgBox{48, 0, lines, "License"};
 			Global::overlay = messageBox();
 		}
 

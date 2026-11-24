@@ -272,7 +272,7 @@ namespace Config {
 	};
 
 	std::unordered_map<std::string_view, string> strings = {
-		{"color_theme", "Default"},
+		{"color_theme", "GPU-Taskmanager"},
 		{"shown_boxes", "cpu mem net proc"},
 		{"graph_symbol", "braille"},
 		{"disable_presets", "Off"},

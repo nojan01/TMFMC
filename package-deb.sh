@@ -16,7 +16,7 @@ install -Dm644 packaging/freemono/source.txt "$doc/FreeMono-source.txt"
 install -Dm644 packaging/tmfmc.desktop "$stage/usr/share/applications/tmfmc.desktop"
 cat > "$stage/DEBIAN/control" <<'CONTROL'
 Package: tmfmc
-Version: 1.0.0-1
+Version: 1.0.1-1
 Section: utils
 Priority: optional
 Architecture: amd64
@@ -27,5 +27,5 @@ Description: Terminal monitor for many-core and multi-GPU servers
  Displays CPU cores, GPU telemetry, memory, storage, network and processes.
 CONTROL
 mkdir -p dist
-dpkg-deb --root-owner-group --build "$stage" dist/tmfmc_1.0.0-1_amd64.deb
-(cd dist && sha256sum tmfmc_1.0.0-1_amd64.deb > SHA256SUMS)
+dpkg-deb --root-owner-group --build "$stage" dist/tmfmc_1.0.1-1_amd64.deb
+(cd dist && sha256sum tmfmc_1.0.1-1_amd64.deb > SHA256SUMS)
