@@ -95,7 +95,7 @@ namespace Global {
 		{"#12aabd", "  █    █   █  █      █   █   ████"},
 		{"#12aabd", "                                 "},
 	};
-	const string Version = "1.0.2";
+	const string Version = "1.0.3";
 
 	int coreCount;
 	string overlay;
