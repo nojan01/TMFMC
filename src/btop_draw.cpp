@@ -545,6 +545,7 @@ namespace Draw {
 
 namespace Cpu {
 	int core_page = 0, core_pages = 1, gpu_page = 0, gpu_pages = 1;
+	bool show_physical_cores = false;
 	int width_p = 100, height_p = 32;
 	int min_width = 60, min_height = 8;
 	int x = 1, y = 1, width = 20, height;
@@ -624,6 +625,11 @@ namespace Cpu {
 		if (safeVal(cpu.cpu_percent, "total"s).empty()
 			or safeVal(cpu.core_percent, 0).empty()
 			or (show_temps and safeVal(cpu.temp, 0).empty())) return "";
+
+		const bool physical = show_physical_cores and not cpu.physical_core_percent.empty();
+		const auto& cpu_history = physical ? cpu.physical_core_percent : cpu.core_percent;
+		const auto& cpu_temperatures = physical ? cpu.physical_core_temp : cpu.temp;
+		const size_t temperature_offset = physical ? 0 : 1;
 
 		string out;
 		out.reserve(width * height);
@@ -759,7 +765,7 @@ namespace Cpu {
 
 			if (b_column_size > 0 or extra_width > 0) {
 				core_graphs.clear();
-				for (const auto& core_data : cpu.core_percent) {
+				for (const auto& core_data : cpu_history) {
 					core_graphs.emplace_back(5 * b_column_size + extra_width, 1, "cpu", core_data, graph_symbol);
 				}
 			}
@@ -768,8 +774,8 @@ namespace Cpu {
 				temp_graphs.clear();
 				temp_graphs.emplace_back(5, 1, "temp", safeVal(cpu.temp, 0), graph_symbol, false, false, safe_cpu_temp_max, -23);
 				if (not hide_cores and b_column_size > 1) {
-					for (const auto& i : iota((size_t)1, cpu.temp.size())) {
-						temp_graphs.emplace_back(5, 1, "temp", safeVal(cpu.temp, i), graph_symbol, false, false, safe_cpu_temp_max, -23);
+					for (const auto& i : iota(temperature_offset, cpu_temperatures.size())) {
+						temp_graphs.emplace_back(5, 1, "temp", safeVal(cpu_temperatures, i), graph_symbol, false, false, safe_cpu_temp_max, -23);
 					}
 				}
 			}
@@ -921,7 +927,7 @@ namespace Cpu {
 		//? Core text and graphs
 		int cx = 0, cy = 1, cc = 0, core_width = (b_column_size == 0 ? 2 : 3);
 		if (Shared::coreCount >= 100) core_width++;
-		const int core_count = static_cast<int>(Shared::coreCount);
+		const int core_count = static_cast<int>(cpu_history.size());
 		const int rows_per_column = max(1, min(max_row - 1, (core_count + b_columns - 1) / b_columns));
 		const int cores_per_page = rows_per_column * b_columns;
 		core_pages = max(1, (core_count + cores_per_page - 1) / cores_per_page);
@@ -929,25 +935,27 @@ namespace Cpu {
 		const int first_core = core_page * cores_per_page;
 		const int last_core = min(first_core + cores_per_page, core_count);
 		for (const auto n : iota(first_core, last_core)) {
-			auto enabled = is_cpu_enabled(n);
-			out += Mv::to(b_y + cy + 1, b_x + cx + 1) + Theme::c(enabled ? "main_fg" : "inactive_fg") + (Shared::coreCount < 100 ? Fx::b + 'C' + Fx::ub : "")
+			auto enabled = physical ? cpu.physical_core_active[n] != 0 : is_cpu_enabled(n);
+			const auto& history = cpu_history[n];
+			const auto usage = history.empty() ? 0ll : history.back();
+			out += Mv::to(b_y + cy + 1, b_x + cx + 1) + Theme::c(enabled ? "main_fg" : "inactive_fg") + (Shared::coreCount < 100 ? Fx::b + (physical ? 'C' : 'T') + Fx::ub : "")
 				+ ljust(to_string(n), core_width);
 			if ((b_column_size > 0 or extra_width > 0) and cmp_less(n, core_graphs.size()))
 				out += Theme::c("inactive_fg") + graph_bg * (5 * b_column_size + extra_width) + Mv::l(5 * b_column_size + extra_width)
-					+ core_graphs.at(n)(safeVal(cpu.core_percent, n), data_same or redraw);
+					+ core_graphs.at(n)(history, data_same or redraw);
 
-			out += enabled ? Theme::g("cpu").at(clamp(safeVal(cpu.core_percent, n).back(), 0ll, 100ll)) : Theme::c("inactive_fg");
-			out += rjust(to_string(safeVal(cpu.core_percent, n).back()), (b_column_size < 2 ? 3 : 4)) + Theme::c(enabled ? "main_fg" : "inactive_fg") + '%';
+			out += enabled ? Theme::g("cpu").at(clamp(usage, 0ll, 100ll)) : Theme::c("inactive_fg");
+			out += rjust(to_string(usage), (b_column_size < 2 ? 3 : 4)) + Theme::c(enabled ? "main_fg" : "inactive_fg") + '%';
 
 			if (show_temps and not hide_cores) {
-				const auto core_temps = safeVal(cpu.temp, n + 1);
+				const auto core_temps = safeVal(cpu_temperatures, n + temperature_offset);
 				if (!core_temps.empty()) {
 					// FIXME: This should be checked during collection and just not be made available with
 					// something like `std::nullopt`.
 					const auto last_temp = core_temps.back();
 					const auto [temp, unit] = celsius_to(last_temp, temp_scale);
 					const auto temp_color = enabled ? Theme::g("temp").at(clamp(last_temp * 100 / safe_cpu_temp_max, 0ll, 100ll)) : Theme::c("inactive_fg");
-					if (b_column_size > 1 and std::cmp_greater_equal(temp_graphs.size(), n)) {
+					if (b_column_size > 1 and std::cmp_greater(temp_graphs.size(), n + 1)) {
 						fmt::format_to(
 							std::back_inserter(out),
 							" {}{}{}{}", Theme::c("inactive_fg"),
@@ -1035,9 +1043,9 @@ namespace Cpu {
 		}
 	#endif
 
-		string page_indicator;
+		string page_indicator = physical ? "Cores" : "Threads";
 		if (core_pages > 1)
-			page_indicator = fmt::format("CPU {}/{}", core_page + 1, core_pages);
+			page_indicator += fmt::format(" {}/{}", core_page + 1, core_pages);
 		if (gpu_pages > 1)
 			page_indicator += fmt::format("{}GPU {}/{}", page_indicator.empty() ? "" : "  ", gpu_page + 1, gpu_pages);
 		if (not page_indicator.empty())

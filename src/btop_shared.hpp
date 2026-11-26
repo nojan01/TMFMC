@@ -233,6 +233,9 @@ namespace Cpu {
 			{"guest_nice", {}}
 		};
 		vector<deque<long long>> core_percent;
+		vector<deque<long long>> physical_core_percent;
+		vector<deque<long long>> physical_core_temp;
+		vector<unsigned char> physical_core_active;
 		vector<deque<long long>> temp;
 		long long temp_max = 0;
 		array<double, 3> load_avg;

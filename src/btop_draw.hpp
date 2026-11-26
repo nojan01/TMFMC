@@ -34,6 +34,7 @@ using std::vector;
 namespace Cpu {
 	// Updated by the renderer and navigated after the draw thread is idle.
 	extern int core_page, core_pages, gpu_page, gpu_pages;
+	extern bool show_physical_cores;
 }
 
 namespace Symbols {
@@ -68,7 +69,7 @@ namespace Symbols {
 namespace Draw {
 
 	inline constexpr std::string_view shortcut_footer =
-		"1 cpu v/V cores  2 mem  3 net  4 proc  5 gpu y/Y gpus  d disk  p/P preset  ?  q quit";
+		"1 cpu v/V page T view  2 mem 3 net 4 proc 5 gpu y/Y gpus d disk p/P preset ? q quit";
 
 	//* Generate if needed and return the btop++ banner
 	string banner_gen(int y=0, int x=0, bool centered=false, bool redraw=false);

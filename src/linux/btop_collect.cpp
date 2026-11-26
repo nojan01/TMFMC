@@ -1101,6 +1101,64 @@ namespace Cpu {
                std::views::join | std::ranges::to<std::vector<std::int32_t>>();
     }
 
+	static void update_physical_cores(cpu_info& cpu) {
+		static vector<vector<size_t>> groups;
+		static size_t logical_count = 0;
+		if (logical_count != cpu.core_percent.size()) {
+			logical_count = cpu.core_percent.size();
+			groups.clear();
+			vector<size_t> group_by_sibling(logical_count, logical_count);
+			for (size_t thread = 0; thread < logical_count; ++thread) {
+				// The first CPU in thread_siblings_list identifies the core across packages.
+				ifstream siblings(fmt::format("/sys/devices/system/cpu/cpu{}/topology/thread_siblings_list", thread));
+				size_t first;
+				if (!(siblings >> first) or first > thread) first = thread;
+				auto& group = group_by_sibling.at(first);
+				if (group == logical_count) {
+					group = groups.size();
+					groups.emplace_back();
+				}
+				groups.at(group).push_back(thread);
+			}
+			cpu.physical_core_percent.assign(groups.size(), {});
+			cpu.physical_core_temp.assign(groups.size(), {});
+			cpu.physical_core_active.resize(groups.size());
+		}
+
+		vector<unsigned char> active(logical_count);
+		for (const auto thread : *cpu.active_cpus)
+			if (thread >= 0 and static_cast<size_t>(thread) < logical_count)
+				active[thread] = true;
+
+		for (size_t core = 0; core < groups.size(); ++core) {
+			long long usage = 0, temperature = 0;
+			size_t running = 0;
+			bool has_temperature = false;
+			for (const auto thread : groups[core]) {
+				if (not active[thread] or cpu.core_percent[thread].empty()) continue;
+				usage += cpu.core_percent[thread].back();
+				++running;
+				if (thread + 1 < cpu.temp.size() and not cpu.temp[thread + 1].empty()) {
+					const auto sample = cpu.temp[thread + 1].back();
+					if (not has_temperature or sample > temperature) temperature = sample;
+					has_temperature = true;
+				}
+			}
+			cpu.physical_core_active[core] = running > 0;
+			auto& history = cpu.physical_core_percent[core];
+			history.push_back(running ? (usage + static_cast<long long>(running) / 2) / static_cast<long long>(running) : 0);
+			if (history.size() > 40) history.pop_front();
+
+			auto& temperatures = cpu.physical_core_temp[core];
+			if (has_temperature) {
+				temperatures.push_back(temperature);
+				if (temperatures.size() > 40) temperatures.pop_front();
+			} else {
+				temperatures.clear();
+			}
+		}
+	}
+
 	auto collect(bool no_update) -> cpu_info& {
 		if (Runner::stopping or (no_update and not current_cpu.cpu_percent.at("total").empty())) return current_cpu;
 		auto& cpu = current_cpu;
@@ -1242,6 +1300,7 @@ namespace Cpu {
 			current_cpu.usage_watts = get_cpuConsumptionWatts();
 
 		cpu.active_cpus = std::make_optional(detect_active_cpus());
+		update_physical_cores(cpu);
 
 		return cpu;
 	}
