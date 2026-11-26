@@ -198,7 +198,11 @@ namespace Menu {
 		{"", "GPU-only view shows up to four GPUs per page. CPU summary needs GPU info Auto or On."},
 		{"", "Auto omits GPUs already shown in their own box. On includes them."},
 		#endif
-		{"v / V", "Previous / next CPU core page. Show CPU with 1. A single page needs no paging."},
+		{"v / V", "Previous / next CPU page in the current view. Show CPU with 1."},
+#ifdef __linux__
+		{"Shift + t", "Switch between logical CPU threads and physical cores."},
+		{"", "Core load averages the active sibling threads. Temperature uses the highest reading."},
+#endif
 		{"", "The CPU box shows current/total pages. Paging wraps at either end."},
 		{"d", "Toggle disks view in MEM box."},
 		{"F2, o", "Open options. Choose a tab and select a setting to read its explanation."},

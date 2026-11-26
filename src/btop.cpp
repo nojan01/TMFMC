@@ -95,7 +95,7 @@ namespace Global {
 		{"#12aabd", "  █    █   █  █      █   █   ████"},
 		{"#12aabd", "                                 "},
 	};
-	const string Version = "1.0.3";
+	const string Version = "1.0.4";
 
 	int coreCount;
 	string overlay;
@@ -721,7 +721,7 @@ namespace Runner {
                 for (size_t start = 0; start < hints.size();) {
                     const auto end = hints.find(' ', start);
                     const auto word = hints.substr(start, end - start);
-                    const bool shortcut = is_in(word, "1", "v/V", "2", "3", "4", "5", "y/Y", "d", "p/P", "?", "q");
+                    const bool shortcut = is_in(word, "1", "v/V", "T", "2", "3", "4", "5", "y/Y", "d", "p/P", "?", "q");
                     if (shortcut) output += Theme::c("hi_fg") + Fx::b;
                     output += word;
                     if (shortcut) output += Fx::ub + Theme::c("main_fg");

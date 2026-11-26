@@ -3,12 +3,12 @@
 Terminal monitor for many-core and multi-GPU servers. Based on
 [btop++ 1.4.8](https://github.com/aristocratos/btop/tree/v1.4.8).
 
-- CPU-only view allocates more width to core columns. Use `v` / `V` to page through cores.
+- CPU-only view allocates more width to the CPU columns. On Linux, press `Shift+T` to switch between logical threads and physical cores. Use `v` / `V` to page through the active view. Physical core load is averaged across active sibling threads.
 - GPU-only view shows up to four detailed GPU panels per page, depending on terminal height. Use `y` / `Y` to change pages.
 - Press `5` or click `5 gpu` to toggle the GPU view. GPU detection depends on the driver and available metrics.
 - Open **License** from the main menu for attribution and licensing information.
 
-Install the AMD64 Debian package using `sudo apt install ./tmfmc_1.0.3-1_amd64.deb` and launch with `tmfmc`.
+Install the AMD64 Debian package using `sudo apt install ./tmfmc_1.0.4-1_amd64.deb` and launch with `tmfmc`.
 Configuration is stored in `${XDG_CONFIG_HOME:-~/.config}/tmfmc/tmfmc.conf`.
 CPU, GPU, memory and network graphs use Braille by default. The optional xterm desktop launcher uses the bundled FreeMono font in UTF-8 mode. For other terminal emulators, select a monospace font with Braille coverage.
 The GPU Taskmanager color scheme is used for new configurations.

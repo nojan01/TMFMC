@@ -238,6 +238,15 @@ namespace Input {
 					Menu::show(Menu::Menus::Options);
 					return;
 				}
+#ifdef __linux__
+				else if (key == "T" and Cpu::shown) {
+					atomic_wait(Runner::active);
+					Cpu::show_physical_cores = not Cpu::show_physical_cores;
+					Cpu::core_page = 0;
+					Runner::run("all", true, true);
+					return;
+				}
+#endif
 				else if (is_in(key, "v", "V", "y", "Y")) {
 					atomic_wait(Runner::active);
 				#ifdef GPU_SUPPORT
