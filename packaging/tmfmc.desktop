@@ -2,7 +2,7 @@
 Type=Application
 Name=TMFMC
 Comment=Terminal monitor for many-core and multi-GPU servers
-Exec=xterm -u8 -fa FreeMono -T TMFMC -e tmfmc
+Exec=xterm -u8 -fa FreeMono -fs 13 -geometry 112x34 -T TMFMC -e tmfmc
 Icon=tmfmc
 Terminal=false
 Categories=System;Monitor;
