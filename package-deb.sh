@@ -17,16 +17,15 @@ install -Dm644 packaging/tmfmc.desktop "$stage/usr/share/applications/tmfmc.desk
 install -Dm644 packaging/tmfmc.png "$stage/usr/share/icons/hicolor/48x48/apps/tmfmc.png"
 cat > "$stage/DEBIAN/control" <<'CONTROL'
 Package: tmfmc
-Version: 1.0.5-1
+Version: 1.0.6-1
 Section: utils
 Priority: optional
 Architecture: amd64
 Maintainer: Norbert Jander <36399468+nojan01@users.noreply.github.com>
-Depends: libc6 (>= 2.38), libgcc-s1 (>= 3.0), libstdc++6 (>= 14)
-Suggests: xterm
+Depends: libc6 (>= 2.38), libgcc-s1 (>= 3.0), libstdc++6 (>= 14), xterm
 Description: Terminal monitor for many-core and multi-GPU servers
  Displays CPU cores, GPU telemetry, memory, storage, network and processes.
 CONTROL
 mkdir -p dist
-dpkg-deb --root-owner-group --build "$stage" dist/tmfmc_1.0.5-1_amd64.deb
-(cd dist && sha256sum tmfmc_1.0.5-1_amd64.deb > SHA256SUMS)
+dpkg-deb --root-owner-group --build "$stage" dist/tmfmc_1.0.6-1_amd64.deb
+(cd dist && sha256sum tmfmc_1.0.6-1_amd64.deb > SHA256SUMS)
